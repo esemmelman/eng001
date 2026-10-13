@@ -62,6 +62,7 @@ function progress(event){
    if(hasAnswer&&!correct){
     const target=mode==='match'?form.querySelector(`[data-definition="${q.id}"]`):row.querySelector(`input[value="${mode==='boolean'?q.answer:q.id}"]`).closest('.option');
     void target.offsetWidth;
+    target.classList.add('revealed-correct');
     target.classList.add('flash-correct');
     flashTimers.set(row,setTimeout(()=>target.classList.remove('flash-correct'),1000));
    }
@@ -89,6 +90,7 @@ form.addEventListener('click',event=>{
 form.addEventListener('change',progress);
 form.addEventListener('submit',e=>e.preventDefault());
 document.querySelectorAll('[data-mode]').forEach(b=>b.addEventListener('click',()=>{mode=b.dataset.mode;start();}));document.querySelector('#restart').addEventListener('click',start);start();
+
 
 
 

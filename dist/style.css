@@ -72,3 +72,6 @@ nav{margin-bottom:28px}
 
 nav{position:sticky;top:0;z-index:100;box-shadow:0 4px 12px #243b3320}
 
+
+.revealed-correct,.definition-pick.revealed-correct:hover,.option.revealed-correct:has(input:checked){background-color:#83e69b;border-color:#299b49;color:#243b33}
+
