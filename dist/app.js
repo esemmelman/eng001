@@ -17,16 +17,20 @@ const words = [
 ];
 const shuffle = a => {a=[...a];for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;};
 const flashTimers = new WeakMap();
-let mode='multiple', questions=[];
+let mode='multiple', questions=[], activeMatch=0;
 const form=document.querySelector('#questions');
 function start(){
- document.querySelector('#results').hidden=true;
+ document.querySelector('#results').hidden=true;activeMatch=0;
  document.querySelectorAll('[data-mode]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.mode===mode)));
  const titles={multiple:'Multiple choice',boolean:'True or false',match:'Matching'};
  document.querySelector('#mode-title').textContent=titles[mode];
- document.querySelector('#instructions').textContent={multiple:'Choose the correct definition for each word.',boolean:'Decide whether each word and definition pair is correct.',match:'Match each word to a definition from the shuffled list. Use each definition once.'}[mode];
+ document.querySelector('#instructions').textContent={multiple:'Choose the correct definition for each word.',boolean:'Decide whether each word and definition pair is correct.',match:'Select a word on the left, then its definition on the right. Use each definition once.'}[mode];
  const bank=shuffle(words.map((_,i)=>i));const truth=shuffle(words.map((_,i)=>i<8));
  questions=shuffle(words.map((_,i)=>i)).map((id,i)=>{const distractors=shuffle(words.map((_,j)=>j).filter(j=>j!==id));return {id,options:shuffle([id,...distractors.slice(0,3)]),shown:truth[i]?id:distractors[0],answer:truth[i]?'true':'false'};});
+ if(mode==='match'){
+  form.innerHTML=`<div class="matching-board"><section class="word-column" aria-label="Words"><h3>Words</h3>${questions.map((q,i)=>`<div id="row${i}" class="match-row"><input type="hidden" name="q${i}" value=""><button type="button" class="word-pick" data-word="${i}" aria-pressed="${i===0}"><span class="number">${i+1}.</span>${words[q.id][0]} <small>${words[q.id][1]}</small></button><div class="match-answer"><span class="pair-letter">Choose a definition →</span><span class="feedback" role="status" hidden></span></div></div>`).join('')}</section><section class="definition-column" aria-label="Definitions"><h3>Definitions</h3>${bank.map((id,j)=>`<button type="button" class="definition-pick" data-definition="${id}"><span class="definition-letter">${String.fromCharCode(65+j)}.</span><span>${words[id][2]}</span></button>`).join('')}</section></div>`;
+  progress();return;
+ }
  form.innerHTML=questions.map((q,i)=>{const w=words[q.id];const heading=`<span class="number">${String(i+1).padStart(2,'0')}</span><strong>${w[0]}</strong><small>${w[1]}</small>`;let fields;
  if(mode==='match'){fields=`<div class="match-answer"><select aria-label="Definition for ${w[0]}" name="q${i}"><option value="">Choose a definition…</option>${bank.map((id,j)=>`<option value="${id}">${String.fromCharCode(65+j)}. ${words[id][2]}</option>`).join('')}</select></div><div class="correct-match" hidden></div>`;}
  else{const opts=mode==='multiple'?q.options.map(id=>[String(id),words[id][2]]):[['true','True'],['false','False']];fields=`<div class="options">${opts.map(([v,t])=>`<label class="option"><input type="radio" name="q${i}" value="${v}">${t}</label>`).join('')}</div>`;}
@@ -49,15 +53,14 @@ function progress(event){
    if(selected)selected.closest('.option').append(feedback);
   }else{
    row.querySelector('.match-answer').append(feedback);
-   const correction=row.querySelector('.correct-match');
-   correction.hidden=!hasAnswer||correct;
-   correction.textContent=`Correct answer: ${words[q.id][2]}`;
+   const chosen=hasAnswer?form.querySelector(`[data-definition="${value}"]`):null;
+   row.querySelector('.pair-letter').textContent=chosen?`Answer: ${chosen.querySelector('.definition-letter').textContent}`:'Choose a definition →';
   }
   if(event?.target.name==='q'+i){
    clearTimeout(flashTimers.get(row));
-   row.querySelectorAll('.flash-correct').forEach(el=>el.classList.remove('flash-correct'));
+   form.querySelectorAll('.flash-correct').forEach(el=>el.classList.remove('flash-correct'));
    if(hasAnswer&&!correct){
-    const target=mode==='match'?row.querySelector('.correct-match'):row.querySelector(`input[value="${mode==='boolean'?q.answer:q.id}"]`).closest('.option');
+    const target=mode==='match'?form.querySelector(`[data-definition="${q.id}"]`):row.querySelector(`input[value="${mode==='boolean'?q.answer:q.id}"]`).closest('.option');
     void target.offsetWidth;
     target.classList.add('flash-correct');
     flashTimers.set(row,setTimeout(()=>target.classList.remove('flash-correct'),1000));
@@ -71,9 +74,22 @@ function progress(event){
  result.hidden=answered!==15;
  if(answered===15)result.innerHTML=`<h2>${score} / 15 · ${Math.round(score/15*100)}%</h2><p>${score===15?'Excellent work! You know every word.':'Review your individual scores, or start a new quiz.'}</p>`;
 }
+form.addEventListener('click',event=>{
+ if(mode!=='match')return;
+ const word=event.target.closest('[data-word]');
+ if(word){activeMatch=Number(word.dataset.word);form.querySelectorAll('[data-word]').forEach(b=>b.setAttribute('aria-pressed',String(Number(b.dataset.word)===activeMatch)));return;}
+ const definition=event.target.closest('[data-definition]');
+ if(!definition)return;
+ const value=definition.dataset.definition;
+ form.querySelectorAll('input[type=hidden]').forEach(input=>{if(input.value===value)input.value='';});
+ const input=form.querySelector(`[name="q${activeMatch}"]`);
+ input.value=value;
+ progress({target:input});
+});
 form.addEventListener('change',progress);
 form.addEventListener('submit',e=>e.preventDefault());
 document.querySelectorAll('[data-mode]').forEach(b=>b.addEventListener('click',()=>{mode=b.dataset.mode;start();}));document.querySelector('#restart').addEventListener('click',start);start();
+
 
 
 
