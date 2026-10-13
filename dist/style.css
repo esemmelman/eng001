@@ -40,3 +40,20 @@ body,button,nav button,.primary,legend,legend strong,small,select,.option,.feedb
 
 nav{margin-bottom:28px}
 
+
+.option{flex-wrap:wrap}
+.feedback{display:inline-block;padding:0;margin-left:auto;font-size:28px}
+.feedback[hidden],.correct-match[hidden]{display:none}
+.incorrect .feedback{color:#a13a2c}
+.correct .feedback{color:#24673c}
+.match-answer{display:flex;align-items:center;gap:16px;flex-wrap:wrap;clear:both}
+.match-answer select{flex:1 1 65%;width:auto}
+.correct-match{font-size:32px;padding:16px;margin-top:12px;border-radius:9px;color:#24673c}
+@keyframes correct-answer-flash{
+ 0%,100%{background-color:transparent;box-shadow:none}
+ 25%,75%{background-color:#83e69b;box-shadow:0 0 0 4px #299b49}
+ 50%{background-color:#e9faee;box-shadow:none}
+}
+.flash-correct{animation:correct-answer-flash 1s linear}
+@media(max-width:600px){.feedback{font-size:26px}.correct-match{font-size:30px}}
+@media(prefers-reduced-motion:reduce){.flash-correct{animation:none;background:#83e69b;box-shadow:0 0 0 4px #299b49}}

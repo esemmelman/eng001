@@ -16,6 +16,7 @@ const words = [
  ['Abrogation','n.','an official or legal cancellation']
 ];
 const shuffle = a => {a=[...a];for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;};
+const flashTimers = new WeakMap();
 let mode='multiple', questions=[];
 const form=document.querySelector('#questions');
 function start(){
@@ -27,12 +28,12 @@ function start(){
  const bank=shuffle(words.map((_,i)=>i));const truth=shuffle(words.map((_,i)=>i<8));
  questions=shuffle(words.map((_,i)=>i)).map((id,i)=>{const distractors=shuffle(words.map((_,j)=>j).filter(j=>j!==id));return {id,options:shuffle([id,...distractors.slice(0,3)]),shown:truth[i]?id:distractors[0],answer:truth[i]?'true':'false'};});
  form.innerHTML=questions.map((q,i)=>{const w=words[q.id];const heading=`<span class="number">${String(i+1).padStart(2,'0')}</span><strong>${w[0]}</strong><small>${w[1]}</small>`;let fields;
- if(mode==='match'){fields=`<select aria-label="Definition for ${w[0]}" name="q${i}"><option value="">Choose a definition…</option>${bank.map((id,j)=>`<option value="${id}">${String.fromCharCode(65+j)}. ${words[id][2]}</option>`).join('')}</select>`;}
+ if(mode==='match'){fields=`<div class="match-answer"><select aria-label="Definition for ${w[0]}" name="q${i}"><option value="">Choose a definition…</option>${bank.map((id,j)=>`<option value="${id}">${String.fromCharCode(65+j)}. ${words[id][2]}</option>`).join('')}</select></div><div class="correct-match" hidden></div>`;}
  else{const opts=mode==='multiple'?q.options.map(id=>[String(id),words[id][2]]):[['true','True'],['false','False']];fields=`<div class="options">${opts.map(([v,t])=>`<label class="option"><input type="radio" name="q${i}" value="${v}">${t}</label>`).join('')}</div>`;}
- return `<fieldset id="row${i}"><legend>${heading}${mode==='boolean'?`<br><span>${words[q.shown][2]}</span>`:''}</legend>${fields}<div class="feedback" role="status" hidden></div></fieldset>`;
+ return `<fieldset id="row${i}"><legend>${heading}${mode==='boolean'?`<br><span>${words[q.shown][2]}</span>`:''}</legend>${fields}<span class="feedback" role="status" hidden></span></fieldset>`;
  }).join('');progress();
 }
-function progress(){
+function progress(event){
  const data=new FormData(form);
  let score=0,answered=0;
  questions.forEach((q,i)=>{
@@ -42,7 +43,26 @@ function progress(){
   answered+=hasAnswer?1:0;score+=correct?1:0;
   row.className=hasAnswer?(correct?'correct':'incorrect'):'';
   feedback.hidden=!hasAnswer;
-  feedback.textContent=!hasAnswer?'':correct?'✓ Correct — 1 / 1 point.':`✗ Incorrect — 0 / 1 point. ${mode==='boolean'?`Answer: ${q.answer}. `:''}${words[q.id][0]}: ${words[q.id][2]}.`;
+  feedback.textContent=!hasAnswer?'':correct?'✓ Correct · 1/1':'✗ Incorrect · 0/1';
+  if(mode!=='match'){
+   const selected=row.querySelector('input:checked');
+   if(selected)selected.closest('.option').append(feedback);
+  }else{
+   row.querySelector('.match-answer').append(feedback);
+   const correction=row.querySelector('.correct-match');
+   correction.hidden=!hasAnswer||correct;
+   correction.textContent=`Correct answer: ${words[q.id][2]}`;
+  }
+  if(event?.target.name==='q'+i){
+   clearTimeout(flashTimers.get(row));
+   row.querySelectorAll('.flash-correct').forEach(el=>el.classList.remove('flash-correct'));
+   if(hasAnswer&&!correct){
+    const target=mode==='match'?row.querySelector('.correct-match'):row.querySelector(`input[value="${mode==='boolean'?q.answer:q.id}"]`).closest('.option');
+    void target.offsetWidth;
+    target.classList.add('flash-correct');
+    flashTimers.set(row,setTimeout(()=>target.classList.remove('flash-correct'),1000));
+   }
+  }
  });
  document.querySelector('#count').textContent=`Score: ${score} / ${answered} answered`;
  document.querySelector('#answered').textContent=`${answered} / 15 answered`;
@@ -54,4 +74,6 @@ function progress(){
 form.addEventListener('change',progress);
 form.addEventListener('submit',e=>e.preventDefault());
 document.querySelectorAll('[data-mode]').forEach(b=>b.addEventListener('click',()=>{mode=b.dataset.mode;start();}));document.querySelector('#restart').addEventListener('click',start);start();
+
+
 
