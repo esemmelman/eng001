@@ -69,3 +69,6 @@ nav{margin-bottom:28px}
 .definition-pick:hover{border-color:#265c47;background:#f0f5ec}
 .definition-letter{color:#265c47;flex-shrink:0}
 @media(max-width:600px){.matching-board{gap:10px;grid-template-columns:minmax(0,1fr) minmax(0,1fr)}.matching-board h3{font-size:24px}.match-row{padding:8px 4px}.word-pick{font-size:24px;padding:8px 2px}.word-pick small,.word-pick .number{font-size:18px}.definition-pick{font-size:22px;padding:10px;gap:6px}.match-row .match-answer,.match-row .feedback{font-size:20px}}
+
+nav{position:sticky;top:0;z-index:100;box-shadow:0 4px 12px #243b3320}
+
