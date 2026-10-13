@@ -37,3 +37,6 @@ fieldset{padding:30px 0}
 body,button,nav button,.primary,legend,legend strong,small,select,.option,.feedback,h1,h1 em,h2{font-weight:700}
 .option{overflow-wrap:anywhere}select{max-width:100%;min-width:0}
 
+
+nav{margin-bottom:28px}
+
