@@ -75,3 +75,8 @@ nav{position:sticky;top:0;z-index:100;box-shadow:0 4px 12px #243b3320}
 
 .revealed-correct,.definition-pick.revealed-correct:hover,.option.revealed-correct:has(input:checked){background-color:#83e69b;border-color:#299b49;color:#243b33}
 
+
+.quiz-head{justify-content:flex-end;margin-bottom:12px}
+.word-toggle{background:transparent;color:inherit;text-align:left;padding:0;line-height:inherit}
+.word-toggle:hover,.word-pick:hover{background:#edf4eb}
+.example-word{color:#16803c;text-decoration:underline;text-underline-offset:.15em}
