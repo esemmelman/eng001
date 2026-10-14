@@ -31,7 +31,7 @@ function start(){
  }
  form.innerHTML=questions.map((q,i)=>{const w=words[q.id];const heading=`<span class="number">${String(i+1).padStart(2,'0')}</span><button type="button" class="word-toggle" data-example="${q.id}" aria-expanded="false"><strong>${w[0]}</strong></button><small>${w[1]}</small>`;let fields;
  if(mode==='match'){fields=`<div class="match-answer"><select aria-label="Definition for ${w[0]}" name="q${i}"><option value="">Choose a definition…</option>${bank.map((id,j)=>`<option value="${id}">${String.fromCharCode(65+j)}. ${words[id][2]}</option>`).join('')}</select></div><div class="correct-match" hidden></div>`;}
- else{const opts=mode==='multiple'?q.options.map(id=>[String(id),words[id][2]]):[['true','True'],['false','False']];fields=`<div class="options">${opts.map(([v,t])=>`<label class="option"><input type="radio" name="q${i}" value="${v}">${t}</label>`).join('')}</div>`;}
+ else{const opts=mode==='multiple'?q.options.map(id=>[String(id),words[id][2]]):[['true','True'],['false','False']];fields=`<div class="options">${opts.map(([v,t])=>`<label class="option"><input type="radio" name="q${i}" value="${v}"><span class="answer-text">${t}</span></label>`).join('')}</div>`;}
  return `<fieldset id="row${i}"><legend>${heading}${mode==='boolean'?`<br><span>${words[q.shown][2]}</span>`:''}</legend>${fields}<span class="feedback" role="status" hidden></span></fieldset>`;
  }).join('');progress();
 }
