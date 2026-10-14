@@ -19,7 +19,7 @@ const shortMeanings = ["Ice Cream", "Public display", "formal command", "Deceive
 const examples = ["I have a predilection for chocolate ice cream.", "Her smile was a manifestation of her joy.", "The judge issued an injunction to stop the work.", "He was dissembling when he said he had done his homework.", "She blatantly broke the rules.", "The vindictive boy hid a toy to get even.", "The photos corroborate her story.", "His frown gave an intimation that something was wrong.", "I felt trepidation before my first day at school.", "The false rumor about her was calumny.", "Our teacher will arbitrate the argument.", "The two contiguous yards share a fence.", "Stealing from the poor is an act of iniquity.", "Daily practice helps with the inculcation of good habits.", "The abrogation of the old rule let us play outside."];
 const shuffle = a => {a=[...a];for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;};
 const flashTimers = new WeakMap();
-let mode='multiple', questions=[], activeMatch=0, groupStart=0;
+let mode='group', questions=[], activeMatch=0, groupStart=0;
 const form=document.querySelector('#questions');
 const restart=document.querySelector('#restart');
 const quizHead=document.querySelector('.quiz-head');
@@ -102,10 +102,12 @@ form.addEventListener('click',event=>{
   groupToggle.querySelector('.group-content').textContent=showWord?word[0]:word[2];
   return;
  }
- if(event.target.closest('[data-next-group]')){
-  groupStart=(groupStart+3)%words.length;
+ const nextGroup=event.target.closest('[data-next-group]');
+ const previousGroup=event.target.closest('[data-previous-group]');
+ if(nextGroup||previousGroup){
+  groupStart=(groupStart+(nextGroup?3:-3)+words.length)%words.length;
   renderGroup();
-  form.querySelector('[data-next-group]').focus();
+  form.querySelector(nextGroup?'[data-next-group]':'[data-previous-group]').focus();
   return;
  }
  const toggle=event.target.closest('[data-example]');
