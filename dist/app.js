@@ -15,7 +15,7 @@ const words = [
  ['Inculcation','n.','teaching or impressing upon the mind by frequent instruction'],
  ['Abrogation','n.','an official or legal cancellation']
 ];
-const shortMeanings = ["Ice Cream", "Public display", "formal command", "Deceive", "obvious", "Revenge", "Support", "Slight suggestion", "feeling of dread", "abusive attack", "Reconciling differences", "Boundaries", "morally objectionable", "frequent instruction", "cancellation"];
+const shortMeanings = ["Ice Cream", "Public display", "formal command", "Deceive", "obvious", "Revenge", "Support", "Slight suggestion", "feeling of dread", "attack on character", "reconcile differences", "Boundaries", "morally objectionable", "frequent instruction", "cancellation"];
 const examples = ["I have a predilection for chocolate ice cream.", "Her smile was a manifestation of her joy.", "The judge issued an injunction to stop the work.", "He was dissembling when he said he had done his homework.", "She blatantly broke the rules.", "The vindictive boy hid a toy to get even.", "The photos corroborate her story.", "His frown gave an intimation that something was wrong.", "I felt trepidation before my first day at school.", "The false rumor about her was calumny.", "Our teacher will arbitrate the argument.", "The two contiguous yards share a fence.", "Stealing from the poor is an act of iniquity.", "Daily practice helps with the inculcation of good habits.", "The abrogation of the old rule let us play outside."];
 const shuffle = a => {a=[...a];for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;};
 const flashTimers = new WeakMap();
