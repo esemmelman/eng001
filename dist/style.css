@@ -93,3 +93,9 @@ nav{position:sticky;top:0;z-index:100;box-shadow:0 4px 12px #243b3320}
 .question-heading>span{min-width:0}
 .question-heading .outline{flex-shrink:0}
 @media(max-width:600px){.question-heading{gap:10px}.question-heading .outline{font-size:20px;padding:10px}}
+
+.actions[hidden]{display:none}
+.alpha-list{list-style:none;margin:0;padding:0}
+.alpha-list li{font-size:38px;line-height:1.6;padding:18px 0;border-bottom:1px solid #edf0e8;overflow-wrap:anywhere}
+.alpha-list li:last-child{border-bottom:0}
+@media(max-width:600px){.alpha-list li{font-size:32px}}
