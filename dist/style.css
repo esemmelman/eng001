@@ -81,11 +81,11 @@ nav{position:sticky;top:0;z-index:100;box-shadow:0 4px 12px #243b3320}
 .word-toggle:hover,.word-pick:hover{background:#edf4eb}
 .example-word{color:#16803c;text-decoration:underline;text-underline-offset:.15em}
 
-/* Keep the circle beside the first answer line at every screen width. */
+/* Center each circle beside its answer text at every screen width. */
 .option{display:grid;grid-template-columns:32px minmax(0,1fr);align-items:start;column-gap:16px;row-gap:8px}
-.option input[type=radio]{margin:calc((1.6em - 32px)/2) 0 0}
-.answer-text{min-width:0}
-.option .feedback{grid-column:2;margin-left:0}
+.option input[type=radio]{margin:0;align-self:center;grid-column:1;grid-row:1}
+.answer-text{min-width:0;grid-column:2;grid-row:1}
+.option .feedback{grid-column:2;grid-row:2;margin-left:0}
 
 .quiz-head[hidden]{display:none}
 #questions>fieldset:first-child{padding-top:0}
