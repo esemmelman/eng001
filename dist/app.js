@@ -20,7 +20,11 @@ const shuffle = a => {a=[...a];for(let i=a.length-1;i>0;i--){const j=Math.floor(
 const flashTimers = new WeakMap();
 let mode='multiple', questions=[], activeMatch=0;
 const form=document.querySelector('#questions');
+const restart=document.querySelector('#restart');
+const quizHead=document.querySelector('.quiz-head');
 function start(){
+ quizHead.append(restart);
+ quizHead.hidden=mode!=='match';
  document.querySelector('#results').hidden=true;activeMatch=0;
  document.querySelectorAll('[data-mode]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.mode===mode)));
  const bank=shuffle(words.map((_,i)=>i));const truth=shuffle(words.map((_,i)=>i<8));
@@ -32,8 +36,10 @@ function start(){
  form.innerHTML=questions.map((q,i)=>{const w=words[q.id];const heading=`<span class="number">${String(i+1).padStart(2,'0')}</span><button type="button" class="word-toggle" data-example="${q.id}" aria-expanded="false"><strong>${w[0]}</strong></button><small>${w[1]}</small>`;let fields;
  if(mode==='match'){fields=`<div class="match-answer"><select aria-label="Definition for ${w[0]}" name="q${i}"><option value="">Choose a definition…</option>${bank.map((id,j)=>`<option value="${id}">${String.fromCharCode(65+j)}. ${words[id][2]}</option>`).join('')}</select></div><div class="correct-match" hidden></div>`;}
  else{const opts=mode==='multiple'?q.options.map(id=>[String(id),words[id][2]]):[['true','True'],['false','False']];fields=`<div class="options">${opts.map(([v,t])=>`<label class="option"><input type="radio" name="q${i}" value="${v}"><span class="answer-text">${t}</span></label>`).join('')}</div>`;}
- return `<fieldset id="row${i}"><legend>${heading}${mode==='boolean'?`<br><span>${words[q.shown][2]}</span>`:''}</legend>${fields}<span class="feedback" role="status" hidden></span></fieldset>`;
- }).join('');progress();
+ return `<fieldset id="row${i}"><legend><div class="question-heading"><span>${heading}</span></div>${mode==='boolean'?`<br><span>${words[q.shown][2]}</span>`:''}</legend>${fields}<span class="feedback" role="status" hidden></span></fieldset>`;
+ }).join('');
+ form.querySelector('.question-heading').append(restart);
+ progress();
 }
 function progress(event){
  const data=new FormData(form);

@@ -86,3 +86,10 @@ nav{position:sticky;top:0;z-index:100;box-shadow:0 4px 12px #243b3320}
 .option input[type=radio]{margin:calc((1.6em - 32px)/2) 0 0}
 .answer-text{min-width:0}
 .option .feedback{grid-column:2;margin-left:0}
+
+.quiz-head[hidden]{display:none}
+#questions>fieldset:first-child{padding-top:0}
+.question-heading{display:flex;align-items:center;justify-content:space-between;gap:16px}
+.question-heading>span{min-width:0}
+.question-heading .outline{flex-shrink:0}
+@media(max-width:600px){.question-heading{gap:10px}.question-heading .outline{font-size:20px;padding:10px}}
