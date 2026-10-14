@@ -19,7 +19,7 @@ const shortMeanings = ["Ice Cream", "Public display", "formal command", "Deceive
 const examples = ["I have a predilection for chocolate ice cream.", "Her smile was a manifestation of her joy.", "The judge issued an injunction to stop the work.", "He was dissembling when he said he had done his homework.", "She blatantly broke the rules.", "The vindictive boy hid a toy to get even.", "The photos corroborate her story.", "His frown gave an intimation that something was wrong.", "I felt trepidation before my first day at school.", "The false rumor about her was calumny.", "Our teacher will arbitrate the argument.", "The two contiguous yards share a fence.", "Stealing from the poor is an act of iniquity.", "Daily practice helps with the inculcation of good habits.", "The abrogation of the old rule let us play outside."];
 const shuffle = a => {a=[...a];for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;};
 const flashTimers = new WeakMap();
-let mode='multiple', questions=[], activeMatch=0;
+let mode='multiple', questions=[], activeMatch=0, groupStart=0;
 const form=document.querySelector('#questions');
 const restart=document.querySelector('#restart');
 const quizHead=document.querySelector('.quiz-head');
@@ -28,7 +28,12 @@ function start(){
  quizHead.hidden=mode!=='match';
  document.querySelector('#results').hidden=true;activeMatch=0;
  document.querySelectorAll('[data-mode]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.mode===mode)));
- document.querySelector('.actions').hidden=mode==='alpha';
+ document.querySelector('.actions').hidden=mode==='alpha'||mode==='group';
+ if(mode==='group'){
+  questions=[];
+  renderGroup();
+  return;
+ }
  if(mode==='alpha'){
   questions=[];
   const alphabetical=words.map((word,id)=>({word:word[0],meaning:shortMeanings[id]})).sort((a,b)=>a.word.localeCompare(b.word));
@@ -48,6 +53,10 @@ function start(){
  }).join('');
  form.querySelector('.question-heading').append(restart);
  progress();
+}
+function renderGroup(){
+ const group=words.slice(groupStart,groupStart+3);
+ form.innerHTML=`<section class="group-list" aria-label="Vocabulary group" aria-live="polite">${group.map((word,i)=>`<div class="group-row"><button type="button" class="group-toggle" data-group-word="${groupStart+i}" aria-pressed="false" aria-label="Show definition for ${word[0]}"><span class="number">${groupStart+i+1}.</span><span class="group-content">${word[0]}</span></button>${i===0?'<button type="button" class="outline" data-next-group>Next →</button>':''}</div>`).join('')}</section>`;
 }
 function progress(event){
  const data=new FormData(form);
@@ -85,6 +94,20 @@ function progress(event){
  if(answered===15)result.innerHTML=`<h2>${score} / 15 · ${Math.round(score/15*100)}%</h2><p>${score===15?'Excellent work! You know every word.':'Review your individual scores, or start a new quiz.'}</p>`;
 }
 form.addEventListener('click',event=>{
+ const groupToggle=event.target.closest('[data-group-word]');
+ if(groupToggle){
+  const word=words[Number(groupToggle.dataset.groupWord)],showWord=groupToggle.getAttribute('aria-pressed')==='true';
+  groupToggle.setAttribute('aria-pressed',String(!showWord));
+  groupToggle.setAttribute('aria-label',showWord?`Show definition for ${word[0]}`:'Show vocabulary word');
+  groupToggle.querySelector('.group-content').textContent=showWord?word[0]:word[2];
+  return;
+ }
+ if(event.target.closest('[data-next-group]')){
+  groupStart=(groupStart+3)%words.length;
+  renderGroup();
+  form.querySelector('[data-next-group]').focus();
+  return;
+ }
  const toggle=event.target.closest('[data-example]');
  if(toggle){
   const id=Number(toggle.dataset.example), expanded=toggle.getAttribute('aria-expanded')==='true';
@@ -105,7 +128,7 @@ form.addEventListener('click',event=>{
 });
 form.addEventListener('change',progress);
 form.addEventListener('submit',e=>e.preventDefault());
-document.querySelectorAll('[data-mode]').forEach(b=>b.addEventListener('click',()=>{mode=b.dataset.mode;start();}));document.querySelector('#restart').addEventListener('click',start);start();
+document.querySelectorAll('[data-mode]').forEach(b=>b.addEventListener('click',()=>{mode=b.dataset.mode;groupStart=0;start();}));document.querySelector('#restart').addEventListener('click',start);start();
 
 
 
