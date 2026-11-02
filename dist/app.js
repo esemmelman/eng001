@@ -100,7 +100,7 @@ const form=document.querySelector('#questions');
 const restart=document.querySelector('#restart');
 function start(){
  restart.hidden=mode==='group'||mode==='alpha';
- document.querySelector('.group-navigation').hidden=mode!=='group';
+ document.querySelector('.quiz').classList.toggle('multiple-mode',mode==='multiple');
  document.querySelector('#results').hidden=true;activeMatch=0;
  document.querySelectorAll('[data-mode]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.mode===mode)));
  document.querySelector('.actions').hidden=mode==='alpha'||mode==='group';
@@ -130,7 +130,7 @@ function start(){
 }
 function renderGroup(){
  const group=words.slice(groupStart,groupStart+3);
- form.innerHTML=`<section class="group-list" aria-label="Vocabulary group" aria-live="polite">${group.map((word,i)=>`<div class="group-row"><button type="button" class="group-toggle" data-group-word="${groupStart+i}" aria-pressed="false" aria-label="Show definition for ${word[0]}"><span class="number">${groupStart+i+1}.</span><span class="group-content">${word[0]}</span></button></div>`).join('')}</section>`;
+ form.innerHTML=`<section class="group-list" aria-label="Vocabulary group" aria-live="polite">${group.map((word,i)=>`<div class="group-row"><button type="button" class="group-toggle" data-group-word="${groupStart+i}" aria-pressed="false" aria-label="Show definition for ${word[0]}"><span class="number">${groupStart+i+1}.</span><span class="group-content">${word[0]}</span></button>${i===0?'<span class="group-navigation"><button type="button" class="outline" data-previous-group>Previous &larr;</button><button type="button" class="outline" data-next-group>Next &rarr;</button></span>':''}</div>`).join('')}</section>`;
 }
 function progress(event){
  const data=new FormData(form);

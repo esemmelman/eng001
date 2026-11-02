@@ -146,3 +146,24 @@ legend strong{font-size:56px}
  .match-row .match-answer,.match-row .feedback{font-size:26px}
  footer,.feedback,.actions p{font-size:30px}
 }
+
+/* Group navigation sits across from the first word. */
+.group-row .group-navigation{display:flex;flex-direction:row;align-items:baseline;align-self:start;gap:24px;margin-left:auto;font-size:38px;line-height:1.6;flex-shrink:0}
+.group-row .group-navigation .outline{padding:0}
+/* Reserve one viewport for each multiple-choice question and all four answers. */
+.multiple-mode{padding:16px 24px}
+.multiple-mode fieldset{min-height:calc(100svh - 150px);padding:18px 0;display:flex;flex-direction:column;justify-content:center;gap:12px}
+.multiple-mode legend{float:none;margin-bottom:12px;font-size:clamp(24px,4svh,42px);line-height:1.2}
+.multiple-mode legend strong{font-size:clamp(30px,5svh,50px)}
+.multiple-mode .number,.multiple-mode small{font-size:clamp(20px,3svh,30px)}
+.multiple-mode .options{grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;width:100%}
+.multiple-mode .option{font-size:clamp(20px,3.7svh,36px);line-height:1.25;padding:12px;column-gap:12px;row-gap:4px}
+.multiple-mode .feedback{font-size:clamp(18px,2.6svh,26px);line-height:1.2}
+@media(max-width:600px){
+ .group-row .group-navigation{font-size:26px;gap:12px}
+ .multiple-mode{padding:12px}
+ .multiple-mode fieldset{min-height:calc(100svh - 145px);gap:8px}
+ .multiple-mode .options{grid-template-columns:1fr;gap:8px}
+ .multiple-mode .option{font-size:clamp(18px,2.8svh,24px);padding:8px;grid-template-columns:24px minmax(0,1fr);column-gap:8px}
+ .multiple-mode input[type=radio]{width:24px;height:24px}
+}
