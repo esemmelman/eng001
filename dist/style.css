@@ -110,3 +110,39 @@ nav{position:sticky;top:0;z-index:100;box-shadow:0 4px 12px #243b3320}
 .alpha-list li{font-size:38px;line-height:1.6;padding:18px 0;border-bottom:1px solid #edf0e8;overflow-wrap:anywhere}
 .alpha-list li:last-child{border-bottom:0}
 @media(max-width:600px){.alpha-list li{font-size:32px}}
+
+/* Keep every navigation control on one top row; scroll on narrow screens. */
+[hidden]{display:none!important}
+:root{font-size:40px}
+main{max-width:1600px;padding-top:12px}
+nav{flex-direction:row;flex-wrap:nowrap;align-items:center;gap:12px;overflow-x:auto;max-width:100%;padding:10px;margin-bottom:20px}
+nav button{flex:0 0 auto;font-size:38px;white-space:nowrap;padding:16px 18px}
+nav .group-navigation{display:flex;flex-direction:row;align-items:center;gap:12px;margin:0;font-size:38px;flex:0 0 auto}
+nav .group-navigation .outline{padding:16px 18px;line-height:normal}
+.group-list{display:block}
+.group-toggle{font-size:64px}
+.number,small{font-size:34px}
+h2{font-size:54px}
+legend{font-size:46px}
+legend strong{font-size:56px}
+.option,select{font-size:46px}
+.feedback,.actions p,footer{font-size:34px}
+.matching-board h3{font-size:38px}
+.word-pick{font-size:42px}
+.definition-pick{font-size:38px}
+.match-row .match-answer,.match-row .feedback{font-size:30px}
+.alpha-list li{font-size:46px}
+@media(max-width:600px){
+ :root{font-size:34px}
+ nav button,nav .group-navigation{font-size:36px}
+ .group-toggle{font-size:52px}
+ legend,.option,select,.alpha-list li{font-size:40px}
+ legend strong{font-size:48px}
+ .number,small{font-size:30px}
+ .word-pick{font-size:32px}
+ .word-pick small,.word-pick .number{font-size:24px}
+ .definition-pick{font-size:30px}
+ .matching-board h3{font-size:30px}
+ .match-row .match-answer,.match-row .feedback{font-size:26px}
+ footer,.feedback,.actions p{font-size:30px}
+}
