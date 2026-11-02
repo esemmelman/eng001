@@ -1,22 +1,98 @@
 const words = [
- ['Predilection','n.','a predisposition in favor of something'],
- ['Manifestation','n.','a public display of group feelings'],
- ['Injunction','n.','a formal command or admonition'],
- ['Dissembling','n.','pretending with intention to deceive'],
- ['Blatantly','adv.','in a completely obvious manner'],
- ['Vindictive','adj.','disposed to seek revenge or intended for revenge'],
- ['Corroborate','v.','support with evidence or authority or make more certain'],
- ['Intimation','n.','a slight suggestion or vague understanding'],
- ['Trepidation','n.','a feeling of alarm or dread'],
- ['Calumny','n.',"an abusive attack on a person's character or good name"],
- ['Arbitrate','v.','act between parties with a view to reconciling differences'],
- ['Contiguous','adj.','having a common boundary or edge'],
- ['Iniquity','n.','morally objectionable behavior'],
- ['Inculcation','n.','teaching or impressing upon the mind by frequent instruction'],
- ['Abrogation','n.','an official or legal cancellation']
+ [
+  "Draught",
+  "n.",
+  "a large and hurried swallow"
+ ],
+ [
+  "Condemnation",
+  "n.",
+  "an expression of strong disapproval"
+ ],
+ [
+  "Pallor",
+  "n.",
+  "an unnatural lack of color in the skin"
+ ],
+ [
+  "Proceeding",
+  "n.",
+  "a sequence of steps by which legal judgments are invoked"
+ ],
+ [
+  "Compensate",
+  "v.",
+  "make amends for"
+ ],
+ [
+  "Perplexed",
+  "adj.",
+  "full of difficulty or confusion or bewilderment"
+ ],
+ [
+  "Ameliorate",
+  "v.",
+  "make better"
+ ],
+ [
+  "Deliberate",
+  "v.",
+  "think about carefully; weigh"
+ ],
+ [
+  "Covet",
+  "v.",
+  "wish, long, or crave for"
+ ],
+ [
+  "Misgiving",
+  "n.",
+  "doubt about someone's honesty"
+ ],
+ [
+  "Daft",
+  "adj.",
+  "foolish or mentally irregular"
+ ],
+ [
+  "Proportionate",
+  "adj.",
+  "being in due magnitude or extent"
+ ],
+ [
+  "Blasphemy",
+  "n.",
+  "the act of depriving something of its sacred character"
+ ],
+ [
+  "Lechery",
+  "n.",
+  "unrestrained indulgence in sexual activity"
+ ],
+ [
+  "Grapple",
+  "v.",
+  "grip or seize, as in a wrestling match"
+ ]
 ];
-const shortMeanings = ["Ice Cream", "Public display", "formal command", "Deceive", "obvious", "Revenge", "Support", "Slight suggestion", "feeling of dread", "attack on character", "reconcile differences", "Boundaries", "morally objectionable", "frequent instruction", "cancellation"];
-const examples = ["I have a predilection for chocolate ice cream.", "Her smile was a manifestation of her joy.", "The judge issued an injunction to stop the work.", "He was dissembling when he said he had done his homework.", "She blatantly broke the rules.", "The vindictive boy hid a toy to get even.", "The photos corroborate her story.", "His frown gave an intimation that something was wrong.", "I felt trepidation before my first day at school.", "The false rumor about her was calumny.", "Our teacher will arbitrate the argument.", "The two contiguous yards share a fence.", "Stealing from the poor is an act of iniquity.", "Daily practice helps with the inculcation of good habits.", "The abrogation of the old rule let us play outside."];
+const shortMeanings = words.map(word => word[2]);
+const examples = [
+ "He drank the water in one draught.",
+ "The proposal drew condemnation from the crowd.",
+ "Her pallor worried the nurse.",
+ "The legal proceeding began in court.",
+ "They offered to compensate her for the damage.",
+ "He looked perplexed by the instructions.",
+ "The new medicine may ameliorate the symptoms.",
+ "The jury will deliberate before reaching a verdict.",
+ "They covet the championship trophy.",
+ "I had a misgiving about whether he was telling the truth.",
+ "It would be daft to go outside in a blizzard without a coat.",
+ "The reward should be proportionate to the effort.",
+ "The desecration of the sacred shrine was condemned as blasphemy.",
+ "The novel portrays a ruler notorious for lechery.",
+ "The wrestlers grapple for control of the match."
+];
 const shuffle = a => {a=[...a];for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;};
 const flashTimers = new WeakMap();
 let mode='group', questions=[], activeMatch=0, groupStart=0;
